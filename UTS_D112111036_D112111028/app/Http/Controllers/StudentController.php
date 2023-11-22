@@ -129,7 +129,6 @@ class StudentController extends Controller
                 $xmlItem->addChild('birthdate', $student['birthdate']);
                 $xmlItem->addChild('phone_number', $student['phone_number']);
                 $xmlItem->addChild('gender', $student['gender']);
-                $xmlItem->addChild('is_admin', $student['is_admin']);
                 $xmlItem->addChild('created_at', $student['created_at']);
                 $xmlItem->addChild('updated_at', $student['updated_at']);
 
@@ -160,7 +159,7 @@ class StudentController extends Controller
                     'address' => 'required',
                     'birthdate' => 'required',
                     'phone_number' => 'required',
-                    'is_admin' => 'required',
+                    'gender' => 'required',
                 ];
                 $validator = Validator::make($input, $validationRules);
 
@@ -189,7 +188,7 @@ class StudentController extends Controller
                         'address' => $xml->address,
                         'birthdate' => $xml->birthdate,
                         'phone_number' => $xml->phone_number,
-                        'is_admin' => $xml->is_admin,
+                        'gender' => $xml->gender
                     ]);
                     if ($student->save()){
                         return $xml ->asXML();

@@ -9,8 +9,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Laravel\Lumen\Auth\Authorizable;
 use App\Models\Task;
+use Tymon\JWTAuth\Contracts\JWTSubject;
 
-class Student extends Model implements AuthenticatableContract, AuthorizableContract
+class Student extends Model implements AuthenticatableContract, JWTSubject
 {
     use Authenticatable, Authorizable, HasFactory;
 
@@ -44,4 +45,14 @@ class Student extends Model implements AuthenticatableContract, AuthorizableCont
     protected $hidden = [
         'password',
     ];
+
+    public function getJWTIdentifier()
+    {
+        return $this->getKey();
+    }
+    
+    public function getJWTCustomClaims()
+    {
+    return [];
+    }
 }

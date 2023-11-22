@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use App\Models\Task;
 
 class TaskController extends Controller
@@ -11,16 +12,23 @@ class TaskController extends Controller
     public function index(Request $request)
     {
         $acceptHeader = $request->header('Accept');
-        $tasks = Task::OrderBy("id", "ASC")->paginate(10)->toArray();
-            $response = [
-                "total_count" => $tasks["total"],
-                "limit" => $tasks["per_page"],
-                "pagination" => [
-                    "next_page" => $tasks["next_page_url"],
-                    "current_page" => $tasks["current_page"]
-                ],
-                "data" => $tasks["data"],
-            ];
+        $tasksQuery = Task::orderBy("id", "ASC");
+
+        // Filter by student_id if the parameter exists in the request
+        if ($request->has('student_id')) {
+            $tasksQuery->where('student_id', $request->input('student_id'));
+        }
+
+        $tasks = $tasksQuery->paginate(10)->toArray();
+        $response = [
+            "total_count" => $tasks["total"],
+            "limit" => $tasks["per_page"],
+            "pagination" => [
+                "next_page" => $tasks["next_page_url"],
+                "current_page" => $tasks["current_page"]
+            ],
+            "data" => $tasks["data"],
+        ];
 
         if ($acceptHeader === "application/json"){
             return response()->json($response,200);

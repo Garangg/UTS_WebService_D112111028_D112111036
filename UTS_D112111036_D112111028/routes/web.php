@@ -17,15 +17,20 @@ $router->get('/', function () use ($router) {
     return $router->app->version();
 });
 
+$router->group(['prefix' => 'auth'], function () use ($router) {
+    $router->post('/register','AuthController@register');
+    $router->post('/login','AuthController@login');
+});
+$router->group(['middleware' => 'auth'], function () use ($router) {
+    $router->get('/tasks','TaskController@index');
+    $router->post('/tasks','TaskController@store');
+    $router->get('/tasks/{id}','TaskController@show');
+    $router->put('/tasks/{id}','TaskController@update');
+    $router->delete('/tasks/{id}','TaskController@destroy');
+    $router->get('/students','StudentController@index');
+    $router->get('/students/{id}','StudentController@show');
+    $router->post('/students','StudentController@store');
+    $router->put('/students/{id}','StudentController@update');
+    $router->delete('/students/{id}','StudentController@destroy');
+});
 
-$router->get('/students','StudentController@index');
-$router->get('/students/{id}','StudentController@show');
-$router->post('/students','StudentController@store');
-$router->put('/students/{1d}','StudentController@update');
-$router->delete('/students/{id}','StudentController@destroy');
-
-$router->get('/tasks','TaskController@index');
-$router->get('/tasks/{id}','TaskController@show');
-$router->post('/tasks','TaskController@store');
-$router->put('/tasks/{id}','TaskController@update');
-$router->delete('/tasks/{id}','TaskController@destroy');
